@@ -1,4 +1,4 @@
-9create Database Empoloyee_dept_Db;
+create Database Empoloyee_dept_Db;
 use Empoloyee_dept_Db;
 
 
@@ -114,17 +114,17 @@ group by d.depname;
 
 #17)Select the count of Employees in each department having salary <10000
 select d.depname,count(e_id) from employee e inner join dept d on e.dep_id=d.dep_id where 
-e.salary<20000 group by d.depname;
+e.salary<10000 group by d.depname;
 
 #18)Select the total number of Employees in Dept id D04
 select count(e_id) from employee e inner join dept d on e.dep_id=d.dep_id where d.dep_id='D04';
 
 #19)Select all department details of the Department with Maximum Employees
-select * from (select d.depname,count(e_id),dense_rank() over 
+select * from (select d.dep_id,d.depname,d.depmanager,count(e_id),dense_rank() over 
 (order by count(e_id) desc) as d from employee e inner join 
 dept d on e.dep_id=d.dep_id group by d.depname) as t where d=1;
 
 
 #20)Select the Employees who has Tim Cook as their manager
 select e.name from employee e inner join dept d on e.dep_id=d.dep_id
- where d.depmanager="Tim Cook"
+ where d.depmanager="Tim Cook";
