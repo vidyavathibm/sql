@@ -30,6 +30,16 @@ select distinct A.dep,sum_sal from (select d.dept_id,d.dept_name,case when d.dep
 else d.dept_name end as dep,e.emp_sal,sum(e.emp_sal) over (order by e.dept_id) as sum_sal
  from emp e left join dept d on e.dept_id=d.dept_id) as A;
  
+#3)Fetch all the Emp_id,Emp_name,Manager_ID and salary who is getting between 2700 and 10000
+#Note: Don't use  between
+select e.empid,e.emp_name,e.managerid,e.emp_sal from emp e
+where e.emp_sal>2700 and e.emp_sal<10000;
+ 
+#4)Fetch all the Manager_ID,Manager_Name and Sum of the employee salary who is reporting to that manager
+#Note: Don't use between
+
+select e.emp_id as manager_id,e.name as manager_name,sum(e.salary) from employee e1 inner join employee e2 
+on e2.manager_id=e1.emp_id group by emp_id;
  
 #select distinct A.dept_id,A.dept_name,sum_sal from (select d.dept_id,d.dept_name,e.emp_sal,sum(e.emp_sal) over (order by e.dept_id) as sum_sal
 #from emp e left join dept d on e.dept_id=d.dept_id) as A group by dept_id,dept_name,sum_sal;
@@ -37,12 +47,11 @@ else d.dept_name end as dep,e.emp_sal,sum(e.emp_sal) over (order by e.dept_id) a
  
 #9)Fetch emp_id,Emp_name,Dept_name & Salary who is getting salary greater than 3000
 #int 'IT' and  salary greater than 3400 int 'Admin'
+
 select * from(select e.empid,e.emp_name,d.dept_name,case when e.emp_sal>3000 and d.dept_name="IT" then e.emp_sal
 							 when e.emp_sal>3400 and d.dept_name="Admin" then e.emp_sal
                              else null end as salary from emp e inner join 
 dept d on e.dept_id=d.dept_id) A where salary is not null;
- 
- select empid,emp_name regexp [%b%e%h%],emp_sal from emp;
  
 #7)Fetch emp_id,Emp_name & Salary who is getting 2nd maximum salary
 
@@ -59,18 +68,26 @@ select * from (select e.empid,e.emp_name,e.emp_sal,dense_rank() over (order by e
 #5)Fetch all the emp_id & derv_Emp_Name 
 #*  Derv_emp_name will be from 4th character till end of the chanracter from emp_name
 #Note: Don’t use regular expression
-
+select * from emp;
 select empid,right(emp_name,length(emp_name)-3) as derv_emp_name from emp; 
 select empid,substring(emp_name,4) as derv_emp_name from emp; 
 
 #6)Fetch all the emp_id & derv_Emp_Name 
 #*  Derv_emp_name will be from first occurance of 'h' till  end of the chanracter from emp_name
 #Note: Don’t use regular expression
-select empid,substr(emp_name,char_index(emp_name,'h'),length(emp_name)-1) as derv_emp_name from emp; 
+select empid,substr(emp_name,position('h' in emp_name),length(emp_name)-1) as derv_emp_name from emp; 
 
 #10)Fetch emp_id,Emp_name,Dept_name & Salary who is having sring 'J' in emp_name
-
 select empid,emp_name,dept_name,emp_sal from emp e inner join dept d on e.dept_id=d.dept_id
 where emp_name like '%j%';
 
+#11)Fetch emp_id,Emp_name,Dept_name & Salary who is having any of sring 'J','N','M' in emp_name
+select empid,emp_name,dept_name,emp_sal from emp e inner join dept d on e.dept_id=d.dept_id
+where emp_name like '%j%' or emp_name like '%n%' or emp_name like '%m%';
 
+#12)Fetch emp_id,Emp_name,Dept_name & Salary who is having all of sring 'B','H','E' in emp_name
+select empid,emp_name,dept_name,emp_sal from emp e inner join dept d on e.dept_id=d.dept_id
+where emp_name like '%b%h%e%';
+
+select empid,emp_name,dept_name,emp_sal from emp e inner join dept d on e.dept_id=d.dept_id
+where emp_name like '%b%' and emp_name like '%h%' and emp_name like '%e%';
