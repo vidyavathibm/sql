@@ -55,6 +55,11 @@ select distinct A.AUTHOR_ID, A.AUTHOR_NAME, A.AUTHOR_COUNTRY, A.AUTHOR_CITY,
  a.PUBLISH_ID, p.PUBLISH_NAME, p.PUBLISH_CITY, p.PUBLISH_START_DATE, p.BRANCHES from publish p
  inner join author a on  a.AUTHOR_CITY=p.PUBLISH_CITY) as A inner join author au on A.AUTHOR_CITY=au.AUTHOR_CITY;
 
+
+select distinct A.* from(select a.AUTHOR_ID, a.AUTHOR_NAME, a.AUTHOR_COUNTRY, a.AUTHOR_CITY,
+ a.PUBLISH_ID, p.PUBLISH_NAME, p.PUBLISH_CITY, p.PUBLISH_START_DATE, p.BRANCHES from publish p
+ inner join author a on  a.AUTHOR_CITY=p.PUBLISH_CITY) as A inner join author au on A.AUTHOR_CITY=au.AUTHOR_CITY;
+
 -- 4 Fetch authors who have incorrect author_country for same author_city. Display correct author_country along
 -- with all author_information
 
@@ -63,7 +68,7 @@ select distinct A.AUTHOR_ID, A.AUTHOR_NAME, A.AUTHOR_COUNTRY, A.AUTHOR_CITY,
  left join publish p on a.author_city=p.publish_city or a.author_country=p.publish_city and p.publish_name is null;
  
  select  AUTHOR_NAME from author a 
- left join publish p on a.author_city=p.publish_city or a.author_country=p.publish_city and p.publish_city is null;
+ left join publish p on a.author_city=p.publish_city and a.author_country=p.publish_city and p.publish_city is null;
  
 -- 6	Fetch author details if first character of publisher name is same as author_name
 select A.AUTHOR_ID, A.AUTHOR_NAME, A.AUTHOR_COUNTRY, A.AUTHOR_CITY, A.PUBLISH_ID from 
@@ -99,6 +104,6 @@ select * from author where lower(substr(author_country,2)) like binary substr(au
 
 select * from (select a.AUTHOR_ID, a.AUTHOR_NAME, a.AUTHOR_COUNTRY, a.AUTHOR_CITY,p.PUBLISH_ID, p.PUBLISH_NAME, PUBLISH_CITY, 
 PUBLISH_START_DATE, BRANCHES from author a inner join publish p on 
-a.publish_id=p.publish_id)as A where publish_start_date in (select max(p.publish_start_date) from publish p);
+a.publish_id=p.publish_id) as A where publish_start_date in (select max(p.publish_start_date) from publish p);
 
 -- 11	Fetch count of authors belong to same continent(eg. Berlin -> Europe)

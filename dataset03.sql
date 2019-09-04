@@ -14,3 +14,18 @@ create table station(Station_ID int,CITY varchar(50),STATE varchar(50),LAT_N int
 insert into station values(13,'Phoenix','AZ',33,112);
 insert into station values(44,'Denver','CO',40,105);
 insert into station values(66,'Caribou','ME',47,68);
+
+select * from (select *,dense_rank() over (partition by city order by temp_farenheit desc,rain_inch desc) 
+as rnk from station st inner join stats s on st.Station_ID=Stats_ID group by month) as A where rnk=1;
+
+select st.Station_ID,st.CITY,st.STATE,s.month,s.year,(s.TEMP_FARENHEIT-32)*5/9 as TEMP_CELSIUS,
+(s.RAIN_INCH*03937) as RAIN_FALL
+from station st inner join stats s on st.Station_ID=Stats_ID;
+
+select case when d=1 and Quarters in ("Q1","Q2","Q3","Q4") then 1
+
+(select *,case when month in (1,2,3) then "Q1"
+		    when month in (4,5,6) then "Q2"
+            when month in (7,8,9) then "Q3"
+            when month in (10,11,12) then "Q4" else null end as Quarters,dense_rank() over ( order by state) as d
+            from station st left join stats s on st.Station_ID=Stats_ID);
