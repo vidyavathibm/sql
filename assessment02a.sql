@@ -30,6 +30,11 @@ select s.Salesman_Name, c.Cust_Name, c.city as Customer_city,s.city as Salesman_
 from  Customer as c   inner join Salesman as s on c.Salesman_id=s.Salesman_id
 where  c.city<>s.City;
 
+
+select * from (select case when c.city<>s.city then s.salesman_name else null end as s,
+c.Cust_Name,c.city,s.city as salesman_city from  Customer as c
+inner join Salesman as s on c.Salesman_id=s.Salesman_id)as A where s is not null;
+
 -- 2) Fetch Salesman_Name, City, Monthly_target, Amount_purchase_by_Customer 
 -- Show only the Sales Man who achieved the monthly Target
 --  Sum of Amount_purchase_by_Customer -- Amount purchased by corresponding customer
