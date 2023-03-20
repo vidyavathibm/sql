@@ -22,9 +22,12 @@ select * from dept;
 #  Table. If Any department is not available in employee table then assign salary as 0.
 #Note: Don’t use sub quesry or in or not in
 
---select distinct A.dept_name,case when A.tot_sum is null then 0 else A.tot_sum  end as Sum_sal from(select d.dept_id,d.dept_name,e.emp_sal,sum(e.emp_sal) over (order by e.dept_id) as tot_sum
+--select distinct A.dept_name,case when A.tot_sum is null then 0 else A.tot_sum  end as Sum_sal 
+--from(select d.dept_id,d.dept_name,e.emp_sal,sum(e.emp_sal) over (order by e.dept_id) as tot_sum
 --from dept d left join emp e on d.dept_id=e.dept_id) as A;
-select distinct A.dept_id,A.dept_name,case when sum_sal is null then '0' else A.sum_sal end as Tot_sal from (select d.dept_id,d.dept_name,e.emp_sal,sum(e.emp_sal) over (partition by  d.dept_id) as sum_sal from dept d left join emp e on d.dept_id=e.dept_id) as A;
+select distinct A.dept_id,A.dept_name,case when sum_sal is null then '0' else A.sum_sal end as Tot_sal 
+from (select d.dept_id,d.dept_name,e.emp_sal,sum(e.emp_sal) over (partition by  d.dept_id) as sum_sal 
+from dept d left join emp e on d.dept_id=e.dept_id) as A;
 
 #2)Fetch all the Deptid &  aggregate all the salary for the respective dept id from Employee table & Corresponding Department name using department Table. If Any department is not available in department table then assign departname as 'Others'
 #Note: Don’t use sub quesry or in or not in
